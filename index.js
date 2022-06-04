@@ -1,3 +1,5 @@
+//import React from 'react'; 
+
 const express = require('express');
 const axios = require('axios');
 const cors = require("cors");
@@ -26,9 +28,13 @@ app.listen(port, () => {
 });
 
  //routes
+
+ //localHost
  app.get('/', async (req,res) => {
 
-  //res.json({mssg:"welcome to api "})
+  res.json({mssg:"welcome to localhost 65533 "})
+
+  ///////////////////
    const db = await mongoClient();
 
    if (!db) res.status(500).send('Systems Unavailable');
@@ -38,7 +44,14 @@ app.listen(port, () => {
  
    return res.send(data);
     });
-
+//addOrder
     app.get('/addOrder',async (req,res) => {
-      res.json({mssg:"welcome to api "})
+      res.json({mssg:"You can order an order here"})
+      //db.collection('ordderInfo').find('status')
+
     });
+//cancelOrder
+    app.get('/cancelOrder',async (req,res) => {
+      res.json({mssg:"Cancel order here"})
+    });
+////////////////////////////////////////////////////////////////////////////////////////////
