@@ -1,8 +1,9 @@
-//import React from 'react'; 
-
+require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
 const cors = require("cors");
+const BodyParser = require("body-parser");
+const { query } = require('express');
 const app = express();
 const port = 65533;
  
@@ -12,10 +13,10 @@ app.use(express.json());
 const { mongoClient } = require('./mongo');
 
 //orderApi File
-const { orderApi } = require('./orderApi'); //link
+const { orderApi, addOrder } = require('./orderApi'); //link
 ////////
 
-const BodyParser = require("body-parser");
+
 app.use(BodyParser.json());
 app.use(BodyParser.urlencoded({ extended: true }));
 
@@ -28,7 +29,6 @@ app.listen(port, () => {
 });
 
  //routes
-
  //localHost
  app.get('/', async (req,res) => {
 
@@ -45,13 +45,14 @@ app.listen(port, () => {
    return res.send(data);
     });
 //addOrder
-    app.get('/addOrder',async (req,res) => {
-      res.json({mssg:"You can order an order here"})
-      //db.collection('ordderInfo').find('status')
 
-    });
+//app.post("/addOrder", query.addOrder);
+
+    app.get('/addOrder',addOrder);
 //cancelOrder
     app.get('/cancelOrder',async (req,res) => {
       res.json({mssg:"Cancel order here"})
     });
+////////////////////////////////////////////////////////////////////////////////////////////
+
 ////////////////////////////////////////////////////////////////////////////////////////////

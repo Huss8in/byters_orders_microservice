@@ -1,42 +1,49 @@
-const express = require('express')
+const url="mongodb+srv://Byters:AmmarY2020@cluster0.aicfa.mongodb.net/?retryWrites=true&w=majority"
+var mongoClient = require('mongodb').MongoClient;
+const axios = require('axios');
 
-const addOrder = (async (request, response) => {
-    const {orderID,prodId,qunt,price,prodName} = request.body
-    totl = price * qunt;
 
-    mongoClient.connect(url, function(err, db) {
+const addOrder = async (request, response) => {
+  const {orderID,prodId,qunt,price,prodName} = request.body
+  totl = price * qunt;
+  mongoClient.connect(url, function(err, db) {
+      if (err) throw err;
+      var dbo = db.db("OrderService");
+      var data = { id: orderID , productId: prodId ,productName: prodName,status: 'CREATED' , quantity: qunt , total: totl };
+      dbo.collection("ordderInfo").insertOne(data, function(err, res) {
         if (err) throw err;
-
-        var dbo = db.db("OrderService");
-        var data = { id: orderID , productId: prodId ,productName: prodName,
-          status: 'CREATED' , quantity: qunt , total: totl };
-
-        dbo.collection("orderInfo").insertOne(data, function(err, res) {
-          if (err) throw err;
-          console.log("Order Inserted Successfully!");
-          db.close();
-        });
-
+        console.log("Order Inserted Successfully!");
+        db.close();
       });
     });
+        console.log("Payment Link created successfully!");
+    response.send(session.url);
+}
 
-      const cancelOrder = async (request, response) => { //in case of cancellation
+/////////////////////////////////////////////////CANCEL_ORDER///////////////////////////////////////////////////////////
 
-        const {orderID,prodId,qunt,price,prodName} = request.body
-        totl = price * qunt;
+//   const cancelOrder = async (request, response) => { //in case of cancellation
 
-        mongoClient.connect(url, function(err, db) {
-            if (err) throw err;
+//         const {orderID,prodId,qunt,price,prodName} = request.body
+//         totl = price * qunt;
 
-            var dbo = db.db("OrderService");
-            var data = { id: orderID , productId: prodId ,productName: prodName,status: 'CANCELLED' ,
-             quantity: qunt , total: totl };
+//         mongoClient.connect(url, function(err, db) {
+//             if (err) throw err;
 
-            dbo.collection("orderInfo").FindAndModify(data, function(err, res) {
-              if (err) throw err;
+//             var dbo = db.db("OrderService");
+//             var data = { id: orderID , productId: prodId ,productName: prodName,status: 'CANCELLED' ,
+//              quantity: qunt , total: totl };
 
-              console.log("Order Cancelled Successfully!");
-              db.close();
-            });
-          });
+//             dbo.collection("orderInfo").FindAndModify(data, function(err, res) {
+//               if (err) throw err;
+
+//               console.log("Order Cancelled Successfully!");
+//               db.close();
+//             });
+//           });
+//         }
+
+        module.exports = {
+
+          addOrder
         }
