@@ -10,47 +10,48 @@ const addOrder = async (request, response) => {
     var dbo = db.db("OrderService");
     var data = {
       id: orderID, productId: prodId, productName: prodName, prodName: 'CREATED',
-      quantity: qunt, total: totl
+      quantity: qunt
     };
     newOrder = dbo.collection("orderInfo").insertOne(data, function (err, res) {
       if (err) throw err;
       console.log("Order Inserted Successfully!");
       db.close();
-      
+      return(response.send({data}))
     });
-  response.send('success')
+
     });
         console.log("Payment Link created successfully!");
     //response.send(session.url);
+
 }
 
+module.exports = {
+  addOrder
+  //,cancelOrder
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////CANCEL_ORDER
 
-  const cancelOrder = async (request, response) => { //in case of cancellation
+  // const cancelOrder = async (request, response) => { //in case of cancellation
 
-        const {orderID,prodId,qunt,price,prodName} = request.body
-        totl = price * qunt;
-        mongoClient.connect(url, function(err, db) {
-            if (err) throw err;
+  //       const {orderID,prodId,qunt,price,prodName} = request.body
+  //       totl = price * qunt;
+  //       mongoClient.connect(url, function(err, db) {
+  //           if (err) throw err;
 
-            var dbo = db.db("OrderService");
-            var data = { id: orderID , productId: prodId ,productName: prodName,status: 'CANCELLED' ,
-             quantity: qunt , total: totl };
+  //           var dbo = db.db("OrderService");
+  //           var data = { id: orderID , productId: prodId ,productName: prodName,status: 'CANCELLED' ,
+  //            quantity: qunt , total: totl };
 
-            dbo.collection("orderInfo").FindAndModify(data, function(err, res) {
-              if (err) throw err;
+  //           dbo.collection("orderInfo").FindAndModify(data, function(err, res) {
+  //             if (err) throw err;
 
-              console.log("Order Cancelled Successfully!");
-              db.close();
-            });
-          });
-        }
-
-        module.exports = {
-          addOrder,
-          cancelOrder
-        }
-
+  //             console.log("Order Cancelled Successfully!");
+  //             db.close();
+  //           });
+  //         });
+  //       }
 // const url = "mongodb+srv://Byters:AmmarY2020@cluster0.aicfa.mongodb.net/?retryWrites=true&w=majority"
 // var mongoClient = require('mongodb').MongoClient;
 // //const axios = require('axios');
@@ -113,7 +114,7 @@ const addOrder = async (request, response) => {
 //   });
 // }
 
-// module.exports = {
-//   addOrder,
-//   cancelOrder
-// }
+//module.exports = {
+  //addOrder
+ //, cancelOrder
+//}

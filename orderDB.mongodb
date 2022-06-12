@@ -1,0 +1,52 @@
+
+use('OrderService');
+//db.orderDB.drop({})
+
+// db.createCollection( "orderDB",
+//    { validator: { $or:
+//       [  { orderNo:{ $type: "int"}},
+//          { status: { $in: [ "CREATED", "PROCESSING","FULFILLED","CANCELED" ] } }
+//       ]
+//    }
+// } )
+
+//orderID, prodId, qunt, price, prodName 
+
+db.orderDB.insertOne({
+    orderID:1,
+    prodId:21,
+    qunt:1,
+    price:30,
+    prodName:"Milk",
+    status:"CREATED" 
+})
+
+db.orderDB.insertOne({
+    orderID:2,
+    prodId:22,
+    qunt:1,
+    price:30,
+    prodName:"Milk",
+    status:"PROCESSING" 
+})
+
+db.orderDB.insertOne({
+    orderID:3,
+    prodId:23,
+    qunt:1,
+    price:30,
+    prodName:"Milk",
+    status:"FULFILLED" 
+})
+
+db.orderDB.insertOne({
+    orderID:4,
+    prodId:24,
+    qunt:1,
+    price:30,
+    prodName:"Milk",
+    status:"CREATED" 
+})
+
+db.orderDB.find({})
+
