@@ -3,6 +3,7 @@ var mongoClient = require('mongodb').MongoClient;
 const axios = require('axios');
 const req = require('express/lib/request');
 var r= 11
+
 const addOrder = async (request, response) => {
   const { orderID, prodId, qunt, price, prodName } = request.body
   totl = price * qunt;
@@ -11,8 +12,9 @@ const addOrder = async (request, response) => {
     var dbo = db.db("OrderService");
    
     var data = {
-      orderID:r, prodId: request.body.prodId, prodName: request.body.prodName, status: 'CREATED',
-      quantity: 1
+      orderID:r, prodId: request.body.prodId, qunt: 1,
+     prodName: request.body.prodName, 
+      status: 'CREATED',
     };
     newOrder = dbo.collection("orderDB").insertOne(data, function (err, res) {
       if (err) throw err;

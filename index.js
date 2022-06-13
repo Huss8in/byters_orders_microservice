@@ -50,46 +50,46 @@ app.all('*', function(req, res, next) {
 app.post('/addOrder', addOrder);
 
 
-//PROCESSING
-app.patch('/ifPay/:orderId', async (req, res) => {
-  const db = await mongoClient();
-  if (!db) res.status(500).send("No db connection");
+// //PROCESSING
+// app.patch('/ifPay/:orderId', async (req, res) => {
+//   const db = await mongoClient();
+//   if (!db) res.status(500).send("No db connection");
 
-  var x = Number(req.params.orderId)
-  console.log(x);
-  const result = await db.collection('orderInfo').findOne({ "Order_id": x });
+//   var x = Number(req.params.orderId)
+//   console.log(x);
+//   const result = await db.collection('orderInfo').findOne({ "Order_id": x });
 
-  const updateShipmentStatus = {
-    CREATED: 'PROCESSING',
-    PROCESSING: 'PROCESSING',
-    FULFILLED: 'PROCESSING',
-  }[result.status];
+//   const updateShipmentStatus = {
+//     CREATED: 'PROCESSING',
+//     PROCESSING: 'PROCESSING',
+//     FULFILLED: 'PROCESSING',
+//   }[result.status];
 
-  const results = await db.collection('orderInfo').updateOne({ "Order_id": x },
-    { $set: { "status": 'PROCESSING' } });
-  return res.status(200).send(results);
-});
+//   const results = await db.collection('orderInfo').updateOne({ "Order_id": x },
+//     { $set: { "status": 'PROCESSING' } });
+//   return res.status(200).send(results);
+// });
 
 
-//FULFILLED
-app.patch('/ifDone/:orderId', async (req, res) => {
-  const db = await mongoClient();
-  if (!db) res.status(500).send("No db connection");
+// //FULFILLED
+// app.patch('/ifDone/:orderId', async (req, res) => {
+//   const db = await mongoClient();
+//   if (!db) res.status(500).send("No db connection");
 
-  var x = Number(req.params.orderId)
-  console.log(x);
-  const result = await db.collection('orderInfo').findOne({ "Order_id": x });
+//   var x = Number(req.params.orderId)
+//   console.log(x);
+//   const result = await db.collection('orderInfo').findOne({ "Order_id": x });
 
-  const updateShipmentStatus = {
-    CREATED: 'FULFILLED',
-    PROCESSING: 'FULFILLED',
-    FULFILLED: 'FULFILLED',
-  }[result.status];
+//   const updateShipmentStatus = {
+//     CREATED: 'FULFILLED',
+//     PROCESSING: 'FULFILLED',
+//     FULFILLED: 'FULFILLED',
+//   }[result.status];
 
-  const results = await db.collection('orderInfo').updateOne({ "Order_id": x },
-    { $set: { "status": 'FULFILLED' } });
-  return res.status(200).send(results);
-});
+//   const results = await db.collection('orderInfo').updateOne({ "Order_id": x },
+//     { $set: { "status": 'FULFILLED' } });
+//   return res.status(200).send(results);
+// });
 
 
 //cancelOrder
