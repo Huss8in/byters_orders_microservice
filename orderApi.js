@@ -1,20 +1,23 @@
 const url="mongodb+srv://Byters:AmmarY2020@cluster0.aicfa.mongodb.net/?retryWrites=true&w=majority"
 var mongoClient = require('mongodb').MongoClient;
 const axios = require('axios');
-
+const req = require('express/lib/request');
+var r= 11
 const addOrder = async (request, response) => {
   const { orderID, prodId, qunt, price, prodName } = request.body
   totl = price * qunt;
   mongoClient.connect(url, function (err, db) {
     if (err) throw err;
     var dbo = db.db("OrderService");
+   
     var data = {
-      id: orderID, productId: prodId, productName: prodName, prodName: 'CREATED',
-      quantity: qunt
+      orderID:r, prodId: request.body.prodId, prodName: request.body.prodName, status: 'CREATED',
+      quantity: 1
     };
-    newOrder = dbo.collection("orderInfo").insertOne(data, function (err, res) {
+    newOrder = dbo.collection("orderDB").insertOne(data, function (err, res) {
       if (err) throw err;
       console.log("Order Inserted Successfully!");
+      r=r+1
       db.close();
       return(response.send({data}))
     });

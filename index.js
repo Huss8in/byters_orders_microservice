@@ -12,7 +12,7 @@ app.use(express.json());
 const { mongoClient } = require('./mongo');
 const BodyParser = require("body-parser");
 
-//const { query } = require('express');
+const { query } = require('express');
 
 
 app.use(BodyParser.json());
@@ -32,13 +32,13 @@ app.listen(port, () => {
 
 //routes
 //localHost
-app.get('/', async (req, res) => {
+// app.get('/', async (req, res) => {
 
-  res.json({ mssg: "welcome to localhost 4000 " })
+//   res.json({ mssg: "welcome to localhost 4000 " })
 
-  const db = await mongoClient();
-  return res.send(data);
-});
+//   const db = await mongoClient();
+//   return res.send(data);
+// });
 //all
 app.all('*', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -48,6 +48,50 @@ app.all('*', function(req, res, next) {
 });
 //addOrder
 app.post('/addOrder', addOrder);
+
+
+//PROCESSING
+app.patch('/ifPay/:orderId', async (req, res) => {
+  const db = await mongoClient();
+  if (!db) res.status(500).send("No db connection");
+
+  var x = Number(req.params.orderId)
+  console.log(x);
+  const result = await db.collection('orderInfo').findOne({ "Order_id": x });
+
+  const updateShipmentStatus = {
+    CREATED: 'PROCESSING',
+    PROCESSING: 'PROCESSING',
+    FULFILLED: 'PROCESSING',
+  }[result.status];
+
+  const results = await db.collection('orderInfo').updateOne({ "Order_id": x },
+    { $set: { "status": 'PROCESSING' } });
+  return res.status(200).send(results);
+});
+
+
+//FULFILLED
+app.patch('/ifDone/:orderId', async (req, res) => {
+  const db = await mongoClient();
+  if (!db) res.status(500).send("No db connection");
+
+  var x = Number(req.params.orderId)
+  console.log(x);
+  const result = await db.collection('orderInfo').findOne({ "Order_id": x });
+
+  const updateShipmentStatus = {
+    CREATED: 'FULFILLED',
+    PROCESSING: 'FULFILLED',
+    FULFILLED: 'FULFILLED',
+  }[result.status];
+
+  const results = await db.collection('orderInfo').updateOne({ "Order_id": x },
+    { $set: { "status": 'FULFILLED' } });
+  return res.status(200).send(results);
+});
+
+
 //cancelOrder
 app.patch('/cancelOrder/:orderId', async (req, res) => {
   const db = await mongoClient();
